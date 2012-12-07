@@ -22,3 +22,4 @@ C:\Users\Jordan\Projects\ShadowShootout\ShadowShootout\ShadowShootout\obj\x86\De
 C:\Users\Jordan\Projects\ShadowShootout\ShadowShootout\ShadowShootout\obj\x86\Debug\ShadowShootout.pdb
 C:\Users\Jordan\Projects\ShadowShootout\ShadowShootout\ShadowShootout\bin\x86\Debug\Content\KryptonEffect.xnb
 C:\Users\Jordan\Projects\ShadowShootout\ShadowShootout\ShadowShootout\bin\x86\Debug\Content\Blank.xnb
+C:\Users\Jordan\Projects\ShadowShootout\ShadowShootout\ShadowShootout\bin\x86\Debug\Content\Concrete.xnb

@@ -9,3 +9,4 @@ Content\Fonts\Visitor43.xnb
 Content\Photon.xnb
 Content\KryptonEffect.xnb
 Content\Blank.xnb
+Content\Concrete.xnb

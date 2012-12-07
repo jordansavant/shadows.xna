@@ -33,24 +33,32 @@ namespace ShadowShootout
         public Game1()
         {
             GraphicsDeviceManager = new GraphicsDeviceManager(this);
+            GraphicsDeviceManager.PreferredBackBufferWidth = PreferredWidth;
+            GraphicsDeviceManager.PreferredBackBufferHeight = PreferredHeight;
+            GraphicsDeviceManager.IsFullScreen = FullScreen;
 
             Content.RootDirectory = "Content";
 
             GameEnvironment.StartServices(this, new ScreenManager(this), null, GraphicsDeviceManager);
+            GameEnvironment.ScreenRectangle = new Rectangle(0, 0, PreferredWidth, PreferredHeight);
 
-            Components.Add(KryptonEngine = new KryptonEngine(this, "KryptonEffect"));
+            KryptonEngine = new KryptonEngine(this, "KryptonEffect");
         }
 
+        private int PreferredWidth = 1920;
+        private int PreferredHeight = 1080;
+        private bool FullScreen = false;
         private GraphicsDeviceManager GraphicsDeviceManager;
         private FrameRateCounter FrameRateCounter;
         private Player Player;
         private KryptonEngine KryptonEngine;
         private Texture2D LightTexture;
-        private float mVerticalUnits = 50;
+        private Texture2D Ground;
 
         protected override void Initialize()
         {
             GamePlayManager.SpriteBatch = new SpriteBatch(GraphicsDevice);
+            KryptonEngine.Initialize();
 
             InitializePhysics();
             InitializeInput();
@@ -66,6 +74,7 @@ namespace ShadowShootout
 
             GamePlayManager.UiManager.AddUiContainer(new UiContainer(GameEnvironment.ScreenRectangle, new UiControlManager()));
 
+            Ground = Content.Load<Texture2D>(@"Concrete");
 
             LightTexture = LightTextureBuilder.CreatePointLight(this.GraphicsDevice, 1024);
             Light2D light = new Light2D()
@@ -73,23 +82,28 @@ namespace ShadowShootout
                 Texture = LightTexture,
                 Range = 120,
                 Color = Color.LightBlue,
-                Intensity = 1f,
+                Intensity = .7f,
                 Angle = MathHelper.TwoPi
             };
 
             Player = new Player(light, new Vector2(100, 100));
             KryptonEngine.Lights.Add(Player.Light);
 
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 80; i++)
             {
                 switch(GameEnvironment.Random.Next(2))
                 {
                     case 0:
-                        CircleBlockade cblockade = new CircleBlockade(5 + GameEnvironment.Random.NextFloat() * 10, new Vector2(GameEnvironment.Random.NextFloat() * 500, GameEnvironment.Random.NextFloat() * 500));
+                        CircleBlockade cblockade = new CircleBlockade(
+                            5 + GameEnvironment.Random.NextFloat() * 10, 
+                            new Vector2(GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Width, GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Height));
                         KryptonEngine.Hulls.Add(cblockade.Hull);
                         break;
                     case 1:
-                        RectangleBlockade rblockade = new RectangleBlockade(5 + GameEnvironment.Random.NextFloat() * 10, 5 + GameEnvironment.Random.NextFloat() * 10, new Vector2(GameEnvironment.Random.NextFloat() * 500, GameEnvironment.Random.NextFloat() * 500));
+                        RectangleBlockade rblockade = new RectangleBlockade(
+                            5 + GameEnvironment.Random.NextFloat() * 10, 
+                            5 + GameEnvironment.Random.NextFloat() * 10, 
+                            new Vector2(GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Width, GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Height));
                         KryptonEngine.Hulls.Add(rblockade.Hull);
                         break;
                 }
@@ -131,13 +145,18 @@ namespace ShadowShootout
             // Assign the matrix and pre-render the lightmap.
             // Make sure not to change the position of any lights or shadow hulls after this call, as it won't take effect till the next frame!
             KryptonEngine.Matrix = matrix;
-            KryptonEngine.Bluriness = 2;
+            KryptonEngine.Bluriness = 1.5f;
             KryptonEngine.SpriteBatchCompatablityEnabled = true;
             KryptonEngine.CullMode = CullMode.CullClockwiseFace;
+            KryptonEngine.AmbientColor = Color.Black;
             KryptonEngine.LightMapPrepare();
 
             // Make sure we clear the backbuffer *after* Krypton is done pre-rendering
             this.GraphicsDevice.Clear(Color.White);
+
+            GamePlayManager.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
+            GamePlayManager.SpriteBatch.Draw(Ground, GameEnvironment.ScreenRectangle, Color.White);
+            GamePlayManager.SpriteBatch.End();
 
             // ----- DRAW STUFF HERE ----- //
             // By drawing here, you ensure that your scene is properly lit by krypton.
@@ -145,7 +164,7 @@ namespace ShadowShootout
             // ----- DRAW STUFF HERE ----- //
 
             // Draw krypton (This can be omited if krypton is in the Component list. It will simply draw krypton when base.Draw is called
-            //KryptonEngine.Draw(gameTime);
+            KryptonEngine.Draw(gameTime);
 
             // Draw the shadow hulls as-is (no shadow stretching) in pure white on top of the shadows
             // You can omit this line if you want to see what the light-map looks like :)

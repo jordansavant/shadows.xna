@@ -11,6 +11,7 @@ using TDGameLibrary.Animation;
 using TDGameLibrary.Input;
 using ShadowShootout.Input;
 using Krypton.Lights;
+using Microsoft.Xna.Framework.Input;
 
 namespace ShadowShootout
 {
@@ -33,6 +34,23 @@ namespace ShadowShootout
             Direction = InputManager.GetCurrentControlVector(VectorControl.Movement);
 
             Light.Position = PositionOnScreen;
+
+            if (InputManager.IsButtonPressed(Keys.Q))
+            {
+                Light.Fov = MathHelper.PiOver2 * (float)(0.5);
+                Light.Color = Color.GhostWhite;
+                Light.Range = 300f;
+                Light.Intensity = .8f;
+            }
+            if (InputManager.IsButtonPressed(Keys.E))
+            {
+                Light.Fov = (float)Math.PI * 2;
+                Light.Color = Color.LightBlue;
+                Light.Range = 120f;
+                Light.Intensity = .7f;
+            }
+
+            Light.Angle = GetRotationFromVector(PhysicalBody.LinearVelocity);
 
             base.Update(gameTime);
         }

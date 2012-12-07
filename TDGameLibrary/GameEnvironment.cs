@@ -64,7 +64,7 @@ namespace TDGameLibrary
         public static ScreenManager GameScreenManager { get; private set; }
         public static StorageManager StorageManager { get; private set; }
         public static GameTime GameTime { get; private set; }
-        public static Rectangle ScreenRectangle { get; private set; }
+        public static Rectangle ScreenRectangle;
         public static Random Random { get; private set; }
         public static EventHandler<PlayerIndexEventArgs> OnPlayerIndexChange;
         private static PlayerIndex _playerIndex = PlayerIndex.One;
