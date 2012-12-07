@@ -64,6 +64,8 @@ namespace Krypton.Common
 
         public BoundingRect(float x, float y, float width, float height)
         {
+            this.Min = new Vector2();
+            this.Max = new Vector2();
             this.Min.X = x;
             this.Min.Y = y;
             this.Max.X = x + width;
@@ -141,7 +143,7 @@ namespace Krypton.Common
 
         public static BoundingRect Intersect(BoundingRect rect1, BoundingRect rect2)
         {
-            BoundingRect result;
+            BoundingRect result = new BoundingRect();
 
             float num8 = rect1.Max.X;
             float num7 = rect2.Max.X;
@@ -172,6 +174,8 @@ namespace Krypton.Common
 
         public static void Intersect(ref BoundingRect rect1, ref BoundingRect rect2, out BoundingRect result)
         {
+            result = new BoundingRect();
+
             float num8 = rect1.Max.X;
             float num7 = rect2.Max.X;
             float num6 = rect1.Max.Y;
@@ -197,7 +201,7 @@ namespace Krypton.Common
 
         public static BoundingRect Union(BoundingRect rect1, BoundingRect rect2)
         {
-            BoundingRect result;
+            BoundingRect result = new BoundingRect();
 
             float num6 = rect1.Max.X;
             float num5 = rect2.Max.X;
@@ -218,6 +222,8 @@ namespace Krypton.Common
 
         public static void Union(ref BoundingRect rect1, ref BoundingRect rect2, out BoundingRect result)
         {
+            result = new BoundingRect();
+
             float num6 = rect1.Max.X;
             float num5 = rect2.Max.X;
             float num4 = rect1.Max.Y;

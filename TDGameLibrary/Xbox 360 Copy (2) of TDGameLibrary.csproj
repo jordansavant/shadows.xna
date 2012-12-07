@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{F94046AE-9CB2-4A24-9E4D-6542EE5D452D}</ProjectGuid>
+    <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">Xbox 360</Platform>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TDGameLibrary</RootNamespace>
+    <AssemblyName>TDGameLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
+    <XnaPlatform>Xbox 360</XnaPlatform>
+    <XnaProfile>HiDef</XnaProfile>
+    <XnaCrossPlatformGroupID>9a6ba9a1-e97a-4b3d-acd2-40f705f85453</XnaCrossPlatformGroupID>
+    <XnaOutputType>Library</XnaOutputType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Xbox 360' ">
+    <OutputPath>bin\Xbox 360\Debug</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE;XBOX;XBOX360</DefineConstants>
+    <XnaCompressContent>true</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Xbox 360' ">
+    <OutputPath>bin\Xbox 360\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;XBOX;XBOX360</DefineConstants>
+    <XnaCompressContent>true</XnaCompressContent>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Farseer Physics Engine 3.3.1 XNA\Xbox 360 Copy of Farseer Physics XNA.csproj">
+      <Project>{5690436c-c3a6-40e9-9a68-0e60503c74f2}</Project>
+      <Name>Xbox 360 Copy of Farseer Physics XNA</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ai\Behavioral\Behavior.cs" />
+    <Compile Include="Ai\Behavioral\BehaviorState.cs" />
+    <Compile Include="Ai\Behavioral\BehaviorTree.cs" />
+    <Compile Include="Ai\Behavioral\SelectorBehaviorTree.cs" />
+    <Compile Include="Ai\Behavioral\SequenceBehaviorTree.cs" />
+    <Compile Include="Ai\Behavioral\Blackboard.cs" />
+    <Compile Include="Ai\Pathfinding\AstarPathfinder.cs" />
+    <Compile Include="Ai\Pathfinding\IPathfinder.cs" />
+    <Compile Include="Ai\Pathfinding\Node.cs" />
+    <Compile Include="Ai\Pathfinding\NodeMap.cs" />
+    <Compile Include="Animation\AnimatedSprite.cs" />
+    <Compile Include="Animation\Animation.cs" />
+    <Compile Include="Audio\SoundManager.cs" />
+    <Compile Include="Behaviors\FocusByClick.cs" />
+    <Compile Include="Behaviors\InvokeAction.cs" />
+    <Compile Include="DataStructures\CircularList.cs" />
+    <Compile Include="DataStructures\DistinctSet.cs" />
+    <Compile Include="DataStructures\HashedList.cs" />
+    <Compile Include="DataStructures\Inventory.cs" />
+    <Compile Include="DataStructures\MobBucketManager.cs" />
+    <Compile Include="DataStructures\MutableDistinctSet.cs" />
+    <Compile Include="DataStructures\ResourcePool.cs" />
+    <Compile Include="DataStructures\TwoDictionary.cs" />
+    <Compile Include="Storage\LoadGameRequest.cs" />
+    <Compile Include="Storage\PlayerIndexEventArgs.cs" />
+    <Compile Include="Storage\SaveGameRequest.cs" />
+    <Compile Include="TdglComponent\TdglComponent.cs" />
+    <Compile Include="Screens\GameScreen.cs" />
+    <Compile Include="Ui\Modifiers\BlinkModifier.cs" />
+    <Compile Include="Ui\Modifiers\UiControlModifier.cs" />
+    <Compile Include="Ui\UiKeyboardCapture.cs" />
+    <Compile Include="Utility\GameTimer.cs" />
+    <Compile Include="VectorHelper.cs" />
+    <Compile Include="XnaComponents\ScreenManager.cs" />
+    <Compile Include="TdglComponent\TriggerManager.cs" />
+    <Compile Include="XnaComponents\StorageManager.cs" />
+    <Compile Include="XnaComponents\TdglComponentManager.cs" />
+    <Compile Include="TdglComponent\ChunkedMapManager.cs" />
+    <Compile Include="TdglComponent\UiComponentManager.cs" />
+    <Compile Include="TdglComponent\WorldManager.cs" />
+    <Compile Include="XnaExtensions.cs" />
+    <Compile Include="Input\Enum\XboxThumbsticks.cs" />
+    <Compile Include="Input\GamePadDeviceButton.cs" />
+    <Compile Include="Input\GamePadVectorBind.cs" />
+    <Compile Include="Input\Interface\IDirectionalDevice.cs" />
+    <Compile Include="Input\Interface\IVectorBind.cs" />
+    <Compile Include="Input\KeyboardVectorBind.cs" />
+    <Compile Include="Input\MouseVectorBind.cs" />
+    <Compile Include="Input\VectorBind.cs" />
+    <Compile Include="Mobs\FarseerPhysicalBody.cs" />
+    <Compile Include="Mobs\GhostBodyManager.cs" />
+    <Compile Include="Mobs\GhostPhysicalBody.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mobs\IDestroyable.cs" />
+    <Compile Include="Mobs\MobAttachment.cs" />
+    <Compile Include="Map\ChunkedMapSettings.cs" />
+    <Compile Include="Map\ExclusiveContentManager.cs" />
+    <Compile Include="Map\MapCamera.cs" />
+    <Compile Include="Map\ChunkedMapEngine.cs" />
+    <Compile Include="Map\UnboundedMapEngine.cs" />
+    <Compile Include="TdglComponent\MobManager.cs" />
+    <Compile Include="Input\Interface\ICursorSensor.cs" />
+    <Compile Include="Input\MouseCursor.cs" />
+    <Compile Include="Mobs\MobManagementExtensions.cs" />
+    <Compile Include="Mobs\DrawOnlyMob.cs" />
+    <Compile Include="Mobs\PhysicalBody.cs" />
+    <Compile Include="Mobs\PooledGhostBody.cs" />
+    <Compile Include="Mobs\PooledFarseerBody.cs" />
+    <Compile Include="Resources\ContentAutoLoader.cs" />
+    <Compile Include="Ui\UiContainer.cs" />
+    <Compile Include="Ui\UiControl.cs" />
+    <Compile Include="Ui\UiControlManager.cs" />
+    <Compile Include="Ui\UiLabel.cs" />
+    <Compile Include="Ui\UiLinkLabel.cs" />
+    <Compile Include="Ui\UiPictureBox.cs" />
+    <Compile Include="FarseerTools\AssetCreator.cs" />
+    <Compile Include="FarseerTools\ConvertUnits.cs" />
+    <Compile Include="FarseerTools\FarseerSprite.cs" />
+    <Compile Include="Input\IStepDrivenInput.cs" />
+    <Compile Include="Input\ButtonBind.cs" />
+    <Compile Include="Input\Interface\IButtonBind.cs" />
+    <Compile Include="Input\Interface\IDeviceButton.cs" />
+    <Compile Include="Input\Interface\IButtonSensor.cs" />
+    <Compile Include="Input\InputManager.cs" />
+    <Compile Include="Input\KeyboardDeviceButton.cs" />
+    <Compile Include="Input\Enum\MouseButton.cs" />
+    <Compile Include="Input\MouseDeviceButton.cs" />
+    <Compile Include="Input\Enum\MouseGesture.cs" />
+    <Compile Include="Input\MouseGestureButton.cs" />
+    <Compile Include="Map\LayeredMapEngine.cs" />
+    <Compile Include="Map\MapLayer.cs" />
+    <Compile Include="Mobs\Mob.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Audio\Sound.cs" />
+    <Compile Include="GameEnvironment.cs" />
+    <Compile Include="Ui\UiFlowContainer.cs" />
+    <Compile Include="Utility\DrawUtility.cs" />
+    <Compile Include="Utility\FpsUtility.cs" />
+    <Compile Include="Utility\FrameRateCounter.cs" />
+    <Compile Include="Utility\MobInfoUtility.cs" />
+    <Compile Include="Weapons\Projectile.cs" />
+    <Compile Include="Weapons\Weapon.cs" />
+    <Compile Include="Weapons\WeaponEffect.cs" />
+    <Compile Include="TdglComponent\WeaponManager.cs" />
+    <Compile Include="XnaHelper.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Avatar">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.GamerServices">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Net">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Storage">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Video">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Xact">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="mscorlib">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Xml">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml.Serialization, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
+  <!--
+      To modify your build process, add your task inside one of the targets below and uncomment it. 
+      Other similar extension points exist, see Microsoft.Common.targets.
+      <Target Name="BeforeBuild">
+      </Target>
+      <Target Name="AfterBuild">
+      </Target>
+    -->
+</Project>

@@ -178,7 +178,7 @@ namespace Krypton.Lights
         {
             get
             {
-                BoundingRect rect;
+                BoundingRect rect = new BoundingRect();
 
                 rect.Min.X = this.mPosition.X - this.mRange;
                 rect.Min.Y = this.mPosition.Y - this.mRange;
