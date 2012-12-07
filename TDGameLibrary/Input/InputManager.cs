@@ -31,7 +31,8 @@ namespace TDGameLibrary.Input
         {
             get
             {
-                return (Guide.IsVisible || !Game.IsActive);
+                return false;
+                //return (Guide.IsVisible || !Game.IsActive);
             }
         }
 

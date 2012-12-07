@@ -43,6 +43,8 @@ namespace ShadowShootout
             GameEnvironment.ScreenRectangle = new Rectangle(0, 0, PreferredWidth, PreferredHeight);
 
             KryptonEngine = new KryptonEngine(this, "KryptonEffect");
+
+            Components.Add(new MousePointer(this));
         }
 
         private int PreferredWidth = 1920;
@@ -119,6 +121,8 @@ namespace ShadowShootout
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
+
+            Globals.CharacterComparisonPointForMouseControlVector = Player.PositionOnScreen;
 
             FrameRateCounter.Update(gameTime);
 
@@ -248,12 +252,17 @@ namespace ShadowShootout
         public void InitializeInput()
         {
 #if WINDOWS
+            InputManager.BindButton(Button.ActivatePointLight, Keys.Q);
+            InputManager.BindButton(Button.ActivateSpotLight, Keys.E);
             InputManager.BindVectorControlToButtons(VectorControl.Movement, Keys.A, Keys.D, Keys.W, Keys.S);
             InputManager.BindCursorToMouse(Cursor.Player1);
+            InputManager.BindVectorControlToMouseCursor(VectorControl.Aiming, () => { return Globals.CharacterComparisonPointForMouseControlVector; }, 5);
 
 #elif XBOX
+            InputManager.BindButton(Button.ActivatePointLight, Buttons.LeftTrigger);
+            InputManager.BindButton(Button.ActivateSpotLight, Buttons.RightTrigger);
             InputManager.BindVectorControl(VectorControl.Movement, XboxThumbsticks.Left);
-            InputManager.BindVectorControl(VectorControl.MenuNavigation, XboxThumbsticks.Left);
+            InputManager.BindVectorControl(VectorControl.Aiming, XboxThumbsticks.Right);
 #endif
         }
     }

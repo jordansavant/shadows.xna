@@ -35,14 +35,14 @@ namespace ShadowShootout
 
             Light.Position = PositionOnScreen;
 
-            if (InputManager.IsButtonPressed(Keys.Q))
+            if (InputManager.IsButtonPressed(Button.ActivatePointLight))
             {
                 Light.Fov = MathHelper.PiOver2 * (float)(0.5);
                 Light.Color = Color.GhostWhite;
                 Light.Range = 300f;
                 Light.Intensity = .8f;
             }
-            if (InputManager.IsButtonPressed(Keys.E))
+            if (InputManager.IsButtonPressed(Button.ActivateSpotLight))
             {
                 Light.Fov = (float)Math.PI * 2;
                 Light.Color = Color.LightBlue;
@@ -50,7 +50,7 @@ namespace ShadowShootout
                 Light.Intensity = .7f;
             }
 
-            Light.Angle = GetRotationFromVector(PhysicalBody.LinearVelocity);
+            Light.Angle = GetRotationFromVector(InputManager.GetCurrentControlVector(VectorControl.Aiming));
 
             base.Update(gameTime);
         }

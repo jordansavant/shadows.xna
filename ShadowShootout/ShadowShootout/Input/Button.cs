@@ -11,26 +11,11 @@ namespace ShadowShootout.Input
         MoveUp,
         MoveRight,
         MoveDown,
-        PrimaryWeaponNext,
-        PrimaryWeaponPrevious,
-        SecondaryWeaponNext,
-        SecondaryWeaponPrevious,
-        FirePrimaryWeapon,
-        FireSecondaryWeapon,
-        Boost,
-        ActivateGameItem,
-        PauseMenu,
-        SelectMenuItem,
-        LoaderPressPlay,
-        Exit,
         MenuUp,
         MenuDown,
         MenuLeft,
         MenuRight,
-        TrialModePurchase,
-        TrialModeNoPurchase,
-        GameOverChooseEnterName,
-        GameOverChooseContinue,
-        AlternateMenuToggle
+        ActivatePointLight,
+        ActivateSpotLight
     }
 }

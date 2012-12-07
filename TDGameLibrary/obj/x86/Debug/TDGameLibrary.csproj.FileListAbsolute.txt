@@ -1,9 +1,0 @@
-C:\Users\Jordan\Projects\ShadowShootout\TDGameLibrary\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\Jordan\Projects\ShadowShootout\TDGameLibrary\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
-C:\Users\Jordan\Projects\ShadowShootout\TDGameLibrary\bin\x86\Debug\TDGameLibrary.dll
-C:\Users\Jordan\Projects\ShadowShootout\TDGameLibrary\bin\x86\Debug\TDGameLibrary.pdb
-C:\Users\Jordan\Projects\ShadowShootout\TDGameLibrary\bin\x86\Debug\FarseerPhysicsXNA.dll
-C:\Users\Jordan\Projects\ShadowShootout\TDGameLibrary\bin\x86\Debug\FarseerPhysicsXNA.pdb
-C:\Users\Jordan\Projects\ShadowShootout\TDGameLibrary\bin\x86\Debug\FarseerPhysicsXNA.xml
-C:\Users\Jordan\Projects\ShadowShootout\TDGameLibrary\obj\x86\Debug\TDGameLibrary.dll
-C:\Users\Jordan\Projects\ShadowShootout\TDGameLibrary\obj\x86\Debug\TDGameLibrary.pdb
