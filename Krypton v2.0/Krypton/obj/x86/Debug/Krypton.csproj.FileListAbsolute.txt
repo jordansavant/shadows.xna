@@ -1,0 +1,24 @@
+C:\Users\Christopher\Desktop\Krypton\Krypton\bin\x86\Debug\Krypton.dll
+C:\Users\Christopher\Desktop\Krypton\Krypton\bin\x86\Debug\Krypton.pdb
+C:\Users\Christopher\Desktop\Krypton\Krypton\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Christopher\Desktop\Krypton\Krypton\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Christopher\Desktop\Krypton\Krypton\obj\x86\Debug\Krypton.dll
+C:\Users\Christopher\Desktop\Krypton\Krypton\obj\x86\Debug\Krypton.pdb
+C:\Users\Christopher\Desktop\Krypton v2.0\Krypton\bin\x86\Debug\Krypton.dll
+C:\Users\Christopher\Desktop\Krypton v2.0\Krypton\bin\x86\Debug\Krypton.pdb
+C:\Users\Christopher\Desktop\Krypton v2.0\Krypton\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Christopher\Desktop\Krypton v2.0\Krypton\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Christopher\Desktop\Krypton v2.0\Krypton\obj\x86\Debug\Krypton.dll
+C:\Users\Christopher\Desktop\Krypton v2.0\Krypton\obj\x86\Debug\Krypton.pdb
+C:\Users\Jordan\Downloads\Krypton v2.0\Krypton v2.0\Krypton\bin\x86\Debug\Krypton.dll
+C:\Users\Jordan\Downloads\Krypton v2.0\Krypton v2.0\Krypton\bin\x86\Debug\Krypton.pdb
+C:\Users\Jordan\Downloads\Krypton v2.0\Krypton v2.0\Krypton\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Jordan\Downloads\Krypton v2.0\Krypton v2.0\Krypton\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Jordan\Downloads\Krypton v2.0\Krypton v2.0\Krypton\obj\x86\Debug\Krypton.dll
+C:\Users\Jordan\Downloads\Krypton v2.0\Krypton v2.0\Krypton\obj\x86\Debug\Krypton.pdb
+C:\Users\Jordan\Projects\ShadowShootout\Krypton v2.0\Krypton\bin\x86\Debug\Krypton.dll
+C:\Users\Jordan\Projects\ShadowShootout\Krypton v2.0\Krypton\bin\x86\Debug\Krypton.pdb
+C:\Users\Jordan\Projects\ShadowShootout\Krypton v2.0\Krypton\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Jordan\Projects\ShadowShootout\Krypton v2.0\Krypton\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Jordan\Projects\ShadowShootout\Krypton v2.0\Krypton\obj\x86\Debug\Krypton.dll
+C:\Users\Jordan\Projects\ShadowShootout\Krypton v2.0\Krypton\obj\x86\Debug\Krypton.pdb

@@ -1,0 +1,6 @@
+C:\Users\Jordan\Projects\TDGL\Farseer Physics Engine 3.3.1 XNA\bin\Xbox 360\Debug\FarseerPhysicsXNA.dll
+C:\Users\Jordan\Projects\TDGL\Farseer Physics Engine 3.3.1 XNA\bin\Xbox 360\Debug\FarseerPhysicsXNA.pdb
+C:\Users\Jordan\Projects\TDGL\Farseer Physics Engine 3.3.1 XNA\obj\Xbox 360\Debug\ResolveAssemblyReference.cache
+C:\Users\Jordan\Projects\TDGL\Farseer Physics Engine 3.3.1 XNA\obj\Xbox 360\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Jordan\Projects\TDGL\Farseer Physics Engine 3.3.1 XNA\obj\Xbox 360\Debug\FarseerPhysicsXNA.dll
+C:\Users\Jordan\Projects\TDGL\Farseer Physics Engine 3.3.1 XNA\obj\Xbox 360\Debug\FarseerPhysicsXNA.pdb

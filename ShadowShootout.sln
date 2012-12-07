@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShadowShootout", "ShadowShootout\ShadowShootout\ShadowShootout.csproj", "{6F16A0E2-12F4-4255-8AB0-431D5F8FD44D}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "ShadowShootoutContent", "ShadowShootout\ShadowShootoutContent\ShadowShootoutContent.contentproj", "{5F604802-D77D-490C-81D0-FBA3E7EA6F61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Krypton", "Krypton v2.0\Krypton\Krypton.csproj", "{B1BFCB2A-C001-4DAC-BA7D-B68BF28757F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TDGameLibrary", "TDGameLibrary\TDGameLibrary.csproj", "{FE0F93EE-376D-4B07-B4E2-3A388370A4DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Farseer Physics XNA", "Farseer Physics Engine 3.3.1 XNA\Farseer Physics XNA.csproj", "{0A850700-1ABB-4288-A391-6726B90EBEB9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+		XBoxDebug|x86 = XBoxDebug|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F16A0E2-12F4-4255-8AB0-431D5F8FD44D}.Debug|x86.ActiveCfg = Debug|x86
+		{6F16A0E2-12F4-4255-8AB0-431D5F8FD44D}.Debug|x86.Build.0 = Debug|x86
+		{6F16A0E2-12F4-4255-8AB0-431D5F8FD44D}.Release|x86.ActiveCfg = Release|x86
+		{6F16A0E2-12F4-4255-8AB0-431D5F8FD44D}.Release|x86.Build.0 = Release|x86
+		{6F16A0E2-12F4-4255-8AB0-431D5F8FD44D}.XBoxDebug|x86.ActiveCfg = Debug|x86
+		{6F16A0E2-12F4-4255-8AB0-431D5F8FD44D}.XBoxDebug|x86.Build.0 = Debug|x86
+		{5F604802-D77D-490C-81D0-FBA3E7EA6F61}.Debug|x86.ActiveCfg = Debug|x86
+		{5F604802-D77D-490C-81D0-FBA3E7EA6F61}.Release|x86.ActiveCfg = Release|x86
+		{5F604802-D77D-490C-81D0-FBA3E7EA6F61}.XBoxDebug|x86.ActiveCfg = Debug|x86
+		{B1BFCB2A-C001-4DAC-BA7D-B68BF28757F3}.Debug|x86.ActiveCfg = Debug|x86
+		{B1BFCB2A-C001-4DAC-BA7D-B68BF28757F3}.Debug|x86.Build.0 = Debug|x86
+		{B1BFCB2A-C001-4DAC-BA7D-B68BF28757F3}.Release|x86.ActiveCfg = Release|x86
+		{B1BFCB2A-C001-4DAC-BA7D-B68BF28757F3}.Release|x86.Build.0 = Release|x86
+		{B1BFCB2A-C001-4DAC-BA7D-B68BF28757F3}.XBoxDebug|x86.ActiveCfg = Debug|x86
+		{B1BFCB2A-C001-4DAC-BA7D-B68BF28757F3}.XBoxDebug|x86.Build.0 = Debug|x86
+		{FE0F93EE-376D-4B07-B4E2-3A388370A4DD}.Debug|x86.ActiveCfg = Debug|x86
+		{FE0F93EE-376D-4B07-B4E2-3A388370A4DD}.Debug|x86.Build.0 = Debug|x86
+		{FE0F93EE-376D-4B07-B4E2-3A388370A4DD}.Release|x86.ActiveCfg = Release|x86
+		{FE0F93EE-376D-4B07-B4E2-3A388370A4DD}.Release|x86.Build.0 = Release|x86
+		{FE0F93EE-376D-4B07-B4E2-3A388370A4DD}.XBoxDebug|x86.ActiveCfg = XBoxDebug|x86
+		{FE0F93EE-376D-4B07-B4E2-3A388370A4DD}.XBoxDebug|x86.Build.0 = XBoxDebug|x86
+		{0A850700-1ABB-4288-A391-6726B90EBEB9}.Debug|x86.ActiveCfg = Debug|x86
+		{0A850700-1ABB-4288-A391-6726B90EBEB9}.Debug|x86.Build.0 = Debug|x86
+		{0A850700-1ABB-4288-A391-6726B90EBEB9}.Release|x86.ActiveCfg = Release|x86
+		{0A850700-1ABB-4288-A391-6726B90EBEB9}.Release|x86.Build.0 = Release|x86
+		{0A850700-1ABB-4288-A391-6726B90EBEB9}.XBoxDebug|x86.ActiveCfg = XBoxDebug|x86
+		{0A850700-1ABB-4288-A391-6726B90EBEB9}.XBoxDebug|x86.Build.0 = XBoxDebug|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
