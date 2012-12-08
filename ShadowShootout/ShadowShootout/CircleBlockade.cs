@@ -37,14 +37,20 @@ namespace ShadowShootout
 
         public static PhysicalBody BuildBody(float size)
         {
+            //return new GhostPhysicalBody(GamePlayManager.GhostBodyManager)
+            //{
+            //    Radius = ConvertUnits.ToSimUnits(size),
+            //    Density = 1
+            //};
             Body body = BodyFactory.CreateCircle(GamePlayManager.WorldManager.World, ConvertUnits.ToSimUnits(size), 1);
-            body.BodyType = BodyType.Static;
+            body.BodyType = BodyType.Dynamic;
+            body.LinearDamping = .2f;
             return new FarseerPhysicalBody(body);
         }
 
         public static ShadowHull BuildHull(float size)
         {
-            return ShadowHull.CreateCircle(size, 50);
+            return ShadowHull.CreateCircle(size, 20);
         }
     }
 }

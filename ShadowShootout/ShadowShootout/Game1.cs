@@ -79,6 +79,9 @@ namespace ShadowShootout
             Ground = Content.Load<Texture2D>(@"Concrete");
 
             LightTexture = LightTextureBuilder.CreatePointLight(this.GraphicsDevice, 1024);
+            CreateLights(LightTexture, 20);
+            CreateHulls(50);
+
             Light2D light = new Light2D()
             {
                 Texture = LightTexture,
@@ -91,25 +94,64 @@ namespace ShadowShootout
             Player = new Player(light, new Vector2(100, 100));
             KryptonEngine.Lights.Add(Player.Light);
 
-            for (int i = 0; i < 80; i++)
+            
+        }
+
+        private void CreateHulls(int count)
+        {
+            for (int i = 0; i < count; i++)
             {
-                switch(GameEnvironment.Random.Next(2))
+                switch (0)//GameEnvironment.Random.Next(2))
                 {
                     case 0:
-                        CircleBlockade cblockade = new CircleBlockade(
-                            5 + GameEnvironment.Random.NextFloat() * 10, 
-                            new Vector2(GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Width, GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Height));
-                        KryptonEngine.Hulls.Add(cblockade.Hull);
-                        break;
-                    case 1:
-                        RectangleBlockade rblockade = new RectangleBlockade(
-                            5 + GameEnvironment.Random.NextFloat() * 10, 
-                            5 + GameEnvironment.Random.NextFloat() * 10, 
-                            new Vector2(GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Width, GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Height));
-                        KryptonEngine.Hulls.Add(rblockade.Hull);
+                        if (i < 20)
+                        {
+                            CircleBlockade cblockade = new CircleBlockade(
+                                5 + GameEnvironment.Random.NextFloat() * 10,
+                                new Vector2(GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Width, GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Height));
+                            KryptonEngine.Hulls.Add(cblockade.Hull);
+                        }
+                        else
+                        {
+                            RectangleBlockade rblockade = new RectangleBlockade(
+                                5 + GameEnvironment.Random.NextFloat() * 10,
+                                5 + GameEnvironment.Random.NextFloat() * 10,
+                                new Vector2(GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Width, GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Height));
+                            KryptonEngine.Hulls.Add(rblockade.Hull);
+                        }
                         break;
                 }
 
+            }
+        }
+
+        private void CreateLights(Texture2D texture, int count)
+        {
+            // Make some random lights!
+            for (int i = 0; i < count; i++)
+            {
+                byte r = (byte)(GameEnvironment.Random.Next(255 - 64) + 64);
+                byte g = (byte)(GameEnvironment.Random.Next(255 - 64) + 64);
+                byte b = (byte)(GameEnvironment.Random.Next(255 - 64) + 64);
+
+                Light2D light = new Light2D()
+                {
+                    Texture = texture,
+                    Range = (float)(GameEnvironment.Random.NextDouble() * 300 + 1),
+                    Color = new Color(r, g, b),
+                    Intensity = 1f,
+                    Angle = MathHelper.TwoPi * (float)GameEnvironment.Random.NextDouble(),
+                    X = (float)(GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Width),
+                    Y = (float)(GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Height),
+                };
+
+                // Here we set the light's field of view
+                if (i % 2 == 0)
+                {
+                    light.Fov = MathHelper.PiOver2 * (float)(GameEnvironment.Random.NextDouble() * 0.75 + 0.25);
+                }
+
+                KryptonEngine.Lights.Add(light);
             }
         }
 
@@ -125,6 +167,18 @@ namespace ShadowShootout
             Globals.CharacterComparisonPointForMouseControlVector = Player.PositionOnScreen;
 
             FrameRateCounter.Update(gameTime);
+
+            var t = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            var speed = 5;
+            foreach (Light2D light in KryptonEngine.Lights)
+            {
+                if (light == Player.Light)
+                    continue;
+
+                light.Position += Vector2.UnitY * (float)(GameEnvironment.Random.NextDouble() * 2 - 1) * t * speed;
+                light.Position += Vector2.UnitX * (float)(GameEnvironment.Random.NextDouble() * 2 - 1) * t * speed;
+                light.Angle -= MathHelper.TwoPi * (float)(GameEnvironment.Random.NextDouble() * 2 - 1) * t * speed;
+            }
 
             base.Update(gameTime);
         }

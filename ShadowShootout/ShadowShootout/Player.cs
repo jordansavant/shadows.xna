@@ -57,6 +57,11 @@ namespace ShadowShootout
 
         public static PhysicalBody BuildBody()
         {
+            //return new GhostPhysicalBody(GamePlayManager.GhostBodyManager)
+            //{
+            //    Radius = ConvertUnits.ToSimUnits(10),
+            //    Density = 1
+            //};
             Body body = BodyFactory.CreateCircle(GamePlayManager.WorldManager.World, ConvertUnits.ToSimUnits(10), 1);
             body.BodyType = BodyType.Dynamic;
             body.LinearDamping = .2f;
