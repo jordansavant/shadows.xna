@@ -13,6 +13,7 @@ using ShadowShootout.Input;
 using Krypton.Lights;
 using TDGameLibrary;
 using Krypton;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ShadowShootout
 {
@@ -24,15 +25,29 @@ namespace ShadowShootout
             SetPhysicalBodyPosition(ConvertUnits.ToSimUnits(positionInWorld));
             AnimatedSprite = new AnimatedSprite(@"Blank");
             Hull = BuildHull(width, height);
+            Texture = GameEnvironment.Game.Content.Load<Texture2D>(@"Black");
+            Rectangle.Width = (int)width;
+            Rectangle.Height = (int)height;
         }
 
         public ShadowHull Hull;
+        private Texture2D Texture;
+        private Rectangle Rectangle;
 
         public override void Update(GameTime gameTime)
         {
             Hull.Position = PositionOnScreen;
+            Rectangle.X = (int)PositionOnScreen.X - Rectangle.Width /2;
+            Rectangle.Y = (int)PositionOnScreen.Y - Rectangle.Height / 2;
 
             base.Update(gameTime);
+        }
+
+        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, float layerDepth)
+        {
+            spriteBatch.Draw(Texture, Rectangle, Color.White);
+
+            base.Draw(gameTime, spriteBatch, layerDepth);
         }
 
         public static PhysicalBody BuildBody(float width, float height)

@@ -17,10 +17,17 @@ namespace ShadowShootout
 {
     class Player : Mob
     {
-        public Player(Light2D light, Vector2 positionInWorld)
+        public Player(Vector2 positionInWorld)
             : base(GamePlayManager.MobManager, BuildBody())
         {
-            Light = light;
+            Light = new Light2D()
+            {
+                Texture = Game1.LightTexture,
+                Range = 120,
+                Color = Color.LightBlue,
+                Intensity = .7f,
+                Angle = MathHelper.TwoPi
+            };
 
             SetPhysicalBodyPosition(ConvertUnits.ToSimUnits(positionInWorld));
             AnimatedSprite = new AnimatedSprite(@"Photon");

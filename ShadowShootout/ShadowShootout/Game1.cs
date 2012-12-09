@@ -54,17 +54,17 @@ namespace ShadowShootout
         private FrameRateCounter FrameRateCounter;
         private Player Player;
         private KryptonEngine KryptonEngine;
-        private Texture2D LightTexture;
         private Texture2D Ground;
+        private bool IsKrypton = true;
+
+        public static Texture2D LightTexture;
 
         protected override void Initialize()
         {
             GamePlayManager.SpriteBatch = new SpriteBatch(GraphicsDevice);
             KryptonEngine.Initialize();
-
             InitializePhysics();
             InitializeInput();
-
             base.Initialize();
         }
 
@@ -73,28 +73,16 @@ namespace ShadowShootout
             FrameRateCounter = new FrameRateCounter(this, Content.Load<SpriteFont>(@"Fonts\Visitor43"), GamePlayManager.SpriteBatch);
             GamePlayManager.StartServices();
             Components.Add(GamePlayManager.GamePlayComponentManager);
-
             GamePlayManager.UiManager.AddUiContainer(new UiContainer(GameEnvironment.ScreenRectangle, new UiControlManager()));
 
             Ground = Content.Load<Texture2D>(@"Concrete");
-
             LightTexture = LightTextureBuilder.CreatePointLight(this.GraphicsDevice, 1024);
-            CreateLights(LightTexture, 20);
+            //CreateLights(LightTexture, 20);
             CreateHulls(50);
 
-            Light2D light = new Light2D()
-            {
-                Texture = LightTexture,
-                Range = 120,
-                Color = Color.LightBlue,
-                Intensity = .7f,
-                Angle = MathHelper.TwoPi
-            };
-
-            Player = new Player(light, new Vector2(100, 100));
-            KryptonEngine.Lights.Add(Player.Light);
-
             
+            Player = new Player(new Vector2(100, 100));
+            KryptonEngine.Lights.Add(Player.Light);
         }
 
         private void CreateHulls(int count)
@@ -104,7 +92,7 @@ namespace ShadowShootout
                 switch (0)//GameEnvironment.Random.Next(2))
                 {
                     case 0:
-                        if (i < 20)
+                        if (i < 5)
                         {
                             CircleBlockade cblockade = new CircleBlockade(
                                 5 + GameEnvironment.Random.NextFloat() * 10,
@@ -113,9 +101,23 @@ namespace ShadowShootout
                         }
                         else
                         {
+                            int w = 10;
+                            int h = 10; 
+                            switch (GameEnvironment.Random.Next(2))
+                            {
+                                case 0:
+                                    w = GameEnvironment.Random.Next(200, 1500);
+                                    h = 10;
+                                    break;
+                                case 1:
+                                    w = 10;
+                                    h = GameEnvironment.Random.Next(20, 400);
+                                    break;
+                            }
+
                             RectangleBlockade rblockade = new RectangleBlockade(
-                                5 + GameEnvironment.Random.NextFloat() * 10,
-                                5 + GameEnvironment.Random.NextFloat() * 10,
+                                w,
+                                h,
                                 new Vector2(GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Width, GameEnvironment.Random.NextFloat() * GameEnvironment.ScreenRectangle.Height));
                             KryptonEngine.Hulls.Add(rblockade.Hull);
                         }
@@ -127,6 +129,7 @@ namespace ShadowShootout
 
         private void CreateLights(Texture2D texture, int count)
         {
+            return;
             // Make some random lights!
             for (int i = 0; i < count; i++)
             {
@@ -155,10 +158,6 @@ namespace ShadowShootout
             }
         }
 
-        protected override void UnloadContent()
-        {
-        }
-
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -168,16 +167,10 @@ namespace ShadowShootout
 
             FrameRateCounter.Update(gameTime);
 
-            var t = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            var speed = 5;
-            foreach (Light2D light in KryptonEngine.Lights)
-            {
-                if (light == Player.Light)
-                    continue;
 
-                light.Position += Vector2.UnitY * (float)(GameEnvironment.Random.NextDouble() * 2 - 1) * t * speed;
-                light.Position += Vector2.UnitX * (float)(GameEnvironment.Random.NextDouble() * 2 - 1) * t * speed;
-                light.Angle -= MathHelper.TwoPi * (float)(GameEnvironment.Random.NextDouble() * 2 - 1) * t * speed;
+            if(InputManager.IsButtonPressed(Keys.O))
+            {
+                IsKrypton = !IsKrypton;
             }
 
             base.Update(gameTime);
@@ -206,7 +199,7 @@ namespace ShadowShootout
             KryptonEngine.Bluriness = 1.5f;
             KryptonEngine.SpriteBatchCompatablityEnabled = true;
             KryptonEngine.CullMode = CullMode.CullClockwiseFace;
-            KryptonEngine.AmbientColor = Color.Black;
+            KryptonEngine.AmbientColor = (IsKrypton ? Color.Black : Color.LightGray);
             KryptonEngine.LightMapPrepare();
 
             // Make sure we clear the backbuffer *after* Krypton is done pre-rendering
@@ -221,70 +214,14 @@ namespace ShadowShootout
             // Drawing after KryptonEngine.Draw will cause you objects to be drawn on top of the lightmap (can be useful, fyi)
             // ----- DRAW STUFF HERE ----- //
 
-            // Draw krypton (This can be omited if krypton is in the Component list. It will simply draw krypton when base.Draw is called
+
             KryptonEngine.Draw(gameTime);
 
-            // Draw the shadow hulls as-is (no shadow stretching) in pure white on top of the shadows
-            // You can omit this line if you want to see what the light-map looks like :)
-            //DebugDraw();
 
             base.Draw(gameTime);
 
             FrameRateCounter.Draw(gameTime);
         }
-
-
-
-
-
-
-
-        private void DebugDraw()
-        {
-            KryptonEngine.RenderHelper.Effect.CurrentTechnique = KryptonEngine.RenderHelper.Effect.Techniques["DebugDraw"];
-            GraphicsDevice.RasterizerState = new RasterizerState()
-            {
-                CullMode = CullMode.None,
-                FillMode = FillMode.WireFrame,
-            };
-            if (Keyboard.GetState().IsKeyDown(Keys.H))
-            {
-                // Clear the helpers vertices
-                KryptonEngine.RenderHelper.ShadowHullVertices.Clear();
-                KryptonEngine.RenderHelper.ShadowHullIndicies.Clear();
-
-                foreach (var hull in KryptonEngine.Hulls)
-                {
-                    KryptonEngine.RenderHelper.BufferAddShadowHull(hull);
-                }
-
-
-                foreach (var effectPass in KryptonEngine.RenderHelper.Effect.CurrentTechnique.Passes)
-                {
-                    effectPass.Apply();
-                    KryptonEngine.RenderHelper.BufferDraw();
-                }
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.L))
-            {
-                KryptonEngine.RenderHelper.ShadowHullVertices.Clear();
-                KryptonEngine.RenderHelper.ShadowHullIndicies.Clear();
-
-                foreach (Light2D light in KryptonEngine.Lights)
-                {
-                    KryptonEngine.RenderHelper.BufferAddBoundOutline(light.Bounds);
-                }
-
-                foreach (var effectPass in KryptonEngine.RenderHelper.Effect.CurrentTechnique.Passes)
-                {
-                    effectPass.Apply();
-                    KryptonEngine.RenderHelper.BufferDraw();
-                }
-            }
-        }
-
-
 
 
 
