@@ -21,6 +21,10 @@ using FarseerPhysics.Factories;
 using TDGameLibrary.Animation;
 using Krypton;
 using Krypton.Lights;
+using FarseerPhysics.Common;
+using FarseerPhysics.Common.PolygonManipulation;
+using FarseerPhysics.Common.Decomposition;
+using System.Diagnostics;
 
 namespace ShadowShootout
 {
@@ -55,6 +59,7 @@ namespace ShadowShootout
         private Player Player;
         private KryptonEngine KryptonEngine;
         private Texture2D Ground;
+        private Texture2D MazeA, MazeB;
         private bool IsKrypton = true;
 
         public static Texture2D LightTexture;
@@ -76,10 +81,14 @@ namespace ShadowShootout
             GamePlayManager.UiManager.AddUiContainer(new UiContainer(GameEnvironment.ScreenRectangle, new UiControlManager()));
 
             Ground = Content.Load<Texture2D>(@"Concrete");
+            MazeA = Content.Load<Texture2D>(@"MazeA");
+            MazeB = Content.Load<Texture2D>(@"MazeB");
             LightTexture = LightTextureBuilder.CreatePointLight(this.GraphicsDevice, 1024);
             //CreateLights(LightTexture, 20);
-            CreateHulls(50);
-
+            //CreateHulls(50);
+            _compoundA = CreateMaze(MazeA, ref _originA);
+            _compoundB = CreateMaze(MazeB, ref _originB);
+            _compoundB.Position += ConvertUnits.ToSimUnits( MazeBOffset);
             
             Player = new Player(new Vector2(100, 100));
             KryptonEngine.Lights.Add(Player.Light);
@@ -158,6 +167,83 @@ namespace ShadowShootout
             }
         }
 
+
+        private Body _compoundA, _compoundB;
+        private Vector2 _originA, _originB;
+        private Vector2 MazeOffset = new Vector2(500, 500);
+        private Vector2 MazeBOffset = new Vector2(152, -147);
+        private float _scale;
+        private Body CreateMaze(Texture2D Texture, ref Vector2 origin)
+        {
+            World World = GamePlayManager.WorldManager.World;
+            World.Gravity = Vector2.Zero;
+
+            //Create an array to hold the data from the texture
+            uint[] data = new uint[Texture.Width * Texture.Height];
+
+            //Transfer the texture data to the array
+            Texture.GetData(data);
+
+            //Find the vertices that makes up the outline of the shape in the texture
+            Vertices textureVertices = PolygonTools.CreatePolygon(data, Texture.Width, false);
+
+            //The tool return vertices as they were found in the texture.
+            //We need to find the real center (centroid) of the vertices for 2 reasons:
+
+            //1. To translate the vertices so the polygon is centered around the centroid.
+            Vector2 centroid = -textureVertices.GetCentroid();
+            textureVertices.Translate(ref centroid);
+
+            //2. To draw the texture the correct place.
+            origin = -centroid;
+
+            //We simplify the vertices found in the texture.
+            textureVertices = SimplifyTools.ReduceByDistance(textureVertices, 4f);
+
+            //Since it is a concave polygon, we need to partition it into several smaller convex polygons
+            /// EarclipDecomposer - 303 polygons - 60fps on XBOX - 7835 Milliseconds on XBOX
+            /// BayazitDecomposer - 108 polygons - 60fps on XBOX -  222 Milliseconds on XBOX
+            Stopwatch s = new Stopwatch();
+            s.Start();
+            List<Vertices> list = BayazitDecomposer.ConvexPartition(textureVertices);
+            s.Stop();
+
+            _scale = 1f;
+
+            // Add to krypton
+            foreach (Vertices vertices in list)
+            {
+                Vector2[] points = new Vector2[vertices.Count];
+                int i = vertices.Count;
+                foreach (Vector2 vector in vertices)
+                {
+                    i--;
+                    points[i] = vector + MazeOffset + (Texture == MazeB ? MazeBOffset : Vector2.Zero);
+                }
+                ShadowHull hull = ShadowHull.CreateConvex(ref points);
+                KryptonEngine.Hulls.Add(hull);
+            }
+
+            //scale the vertices from graphics space to sim space
+            Vector2 vertScale = new Vector2(ConvertUnits.ToSimUnits(1)) * _scale;
+            foreach (Vertices vertices in list)
+            {
+                vertices.Scale(ref vertScale);
+            }
+
+            //Create a single body with multiple fixtures
+            Body compound = BodyFactory.CreateCompoundPolygon(World, list, 1f, BodyType.Static);
+            compound.BodyType = BodyType.Static;
+            compound.Position = ConvertUnits.ToSimUnits(MazeOffset);
+
+            new Mob(GamePlayManager.MobManager, new FarseerPhysicalBody(compound))
+            {
+                AnimatedSprite = new AnimatedSprite(@"Blank")
+            };
+
+            return compound;
+        }
+
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -207,6 +293,12 @@ namespace ShadowShootout
 
             GamePlayManager.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
             GamePlayManager.SpriteBatch.Draw(Ground, GameEnvironment.ScreenRectangle, Color.White);
+            GamePlayManager.SpriteBatch.Draw(MazeA, ConvertUnits.ToDisplayUnits(_compoundA.Position),
+                                           null, Color.Tomato, _compoundA.Rotation, _originA, _scale, SpriteEffects.None,
+                                           0f);
+            GamePlayManager.SpriteBatch.Draw(MazeB, ConvertUnits.ToDisplayUnits(_compoundB.Position),
+                                           null, Color.Tomato, _compoundB.Rotation, _originB, _scale, SpriteEffects.None,
+                                           0f);
             GamePlayManager.SpriteBatch.End();
 
             // ----- DRAW STUFF HERE ----- //
@@ -217,6 +309,7 @@ namespace ShadowShootout
 
             KryptonEngine.Draw(gameTime);
 
+            DebugDraw();
 
             base.Draw(gameTime);
 
@@ -225,7 +318,50 @@ namespace ShadowShootout
 
 
 
+        private void DebugDraw()
+        {
+            KryptonEngine.RenderHelper.Effect.CurrentTechnique = KryptonEngine.RenderHelper.Effect.Techniques["DebugDraw"];
+            this.GraphicsDevice.RasterizerState = new RasterizerState()
+            {
+                CullMode = CullMode.None,
+                FillMode = FillMode.WireFrame,
+            };
+            if (Keyboard.GetState().IsKeyDown(Keys.H))
+            {
+                // Clear the helpers vertices
+                KryptonEngine.RenderHelper.ShadowHullVertices.Clear();
+                KryptonEngine.RenderHelper.ShadowHullIndicies.Clear();
 
+                foreach (var hull in KryptonEngine.Hulls)
+                {
+                    KryptonEngine.RenderHelper.BufferAddShadowHull(hull);
+                }
+
+
+                foreach (var effectPass in KryptonEngine.RenderHelper.Effect.CurrentTechnique.Passes)
+                {
+                    effectPass.Apply();
+                    KryptonEngine.RenderHelper.BufferDraw();
+                }
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.L))
+            {
+                KryptonEngine.RenderHelper.ShadowHullVertices.Clear();
+                KryptonEngine.RenderHelper.ShadowHullIndicies.Clear();
+
+                foreach (Light2D light in KryptonEngine.Lights)
+                {
+                    KryptonEngine.RenderHelper.BufferAddBoundOutline(light.Bounds);
+                }
+
+                foreach (var effectPass in KryptonEngine.RenderHelper.Effect.CurrentTechnique.Passes)
+                {
+                    effectPass.Apply();
+                    KryptonEngine.RenderHelper.BufferDraw();
+                }
+            }
+        }
 
 
 
