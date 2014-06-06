@@ -25,6 +25,7 @@ using FarseerPhysics.Common;
 using FarseerPhysics.Common.PolygonManipulation;
 using FarseerPhysics.Common.Decomposition;
 using System.Diagnostics;
+using FarseerPhysics.Collision;
 
 namespace ShadowShootout
 {
@@ -83,12 +84,12 @@ namespace ShadowShootout
             Ground = Content.Load<Texture2D>(@"Concrete");
             MazeA = Content.Load<Texture2D>(@"MazeA");
             MazeB = Content.Load<Texture2D>(@"MazeB");
-            LightTexture = LightTextureBuilder.CreatePointLight(this.GraphicsDevice, 1024);
+            LightTexture = LightTextureBuilder.CreatePointLight(this.GraphicsDevice, 512);
             //CreateLights(LightTexture, 20);
             //CreateHulls(50);
-            _compoundA = CreateMaze(MazeA, ref _originA);
-            _compoundB = CreateMaze(MazeB, ref _originB);
-            _compoundB.Position += ConvertUnits.ToSimUnits( MazeBOffset);
+            _compoundA = LevelFromTexture(MazeA, ref _originA);
+            _compoundB = LevelFromTexture(MazeB, ref _originB);
+            //_compoundB.Position += ConvertUnits.ToSimUnits( MazeBOffset);
             
             Player = new Player(new Vector2(100, 100));
             KryptonEngine.Lights.Add(Player.Light);
@@ -170,45 +171,56 @@ namespace ShadowShootout
 
         private Body _compoundA, _compoundB;
         private Vector2 _originA, _originB;
-        private Vector2 MazeOffset = new Vector2(500, 500);
-        private Vector2 MazeBOffset = new Vector2(152, -147);
+        private Vector2 MazeOffset = new Vector2(1000, 500);
         private float _scale;
-        private Body CreateMaze(Texture2D Texture, ref Vector2 origin)
+        private Body LevelFromTexture(Texture2D Texture, ref Vector2 origin)
         {
+            // Get the world
             World World = GamePlayManager.WorldManager.World;
             World.Gravity = Vector2.Zero;
+            _scale = 1.15f;
 
-            //Create an array to hold the data from the texture
+            // Create an array to hold the data from the texture
             uint[] data = new uint[Texture.Width * Texture.Height];
 
-            //Transfer the texture data to the array
+            // Transfer the texture data to the array
             Texture.GetData(data);
 
-            //Find the vertices that makes up the outline of the shape in the texture
+            // Find the vertices that makes up the outline of the shape in the texture
             Vertices textureVertices = PolygonTools.CreatePolygon(data, Texture.Width, false);
 
-            //The tool return vertices as they were found in the texture.
-            //We need to find the real center (centroid) of the vertices for 2 reasons:
+            // The tool return vertices as they were found in the texture.
+            // We need to find the real center (centroid) of the vertices for 2 reasons:
+            // 1. To translate the vertices so the polygon is centered around the centroid.
+            // 2. To draw the texture and lighting the correct place.
 
-            //1. To translate the vertices so the polygon is centered around the centroid.
             Vector2 centroid = -textureVertices.GetCentroid();
             textureVertices.Translate(ref centroid);
 
-            //2. To draw the texture the correct place.
+            Vector2 textureCenter = new Rectangle(0, 0, Texture.Width, Texture.Height).Center.ToVector2();
             origin = -centroid;
 
-            //We simplify the vertices found in the texture.
+            Vector2 offset = -(textureCenter - origin) * _scale;
+
+            // We simplify the vertices found in the texture.
             textureVertices = SimplifyTools.ReduceByDistance(textureVertices, 4f);
 
-            //Since it is a concave polygon, we need to partition it into several smaller convex polygons
-            /// EarclipDecomposer - 303 polygons - 60fps on XBOX - 7835 Milliseconds on XBOX
-            /// BayazitDecomposer - 108 polygons - 60fps on XBOX -  222 Milliseconds on XBOX
-            Stopwatch s = new Stopwatch();
-            s.Start();
+            // Since it is a concave polygon, we need to partition it into several smaller convex polygons
+            // -- EarclipDecomposer - 303 polygons - 60fps on XBOX - 7835 Milliseconds on XBOX
+            // -- BayazitDecomposer - 108 polygons - 60fps on XBOX -  222 Milliseconds on XBOX
             List<Vertices> list = BayazitDecomposer.ConvexPartition(textureVertices);
-            s.Stop();
 
-            _scale = 1f;
+            // Scale the vertices from graphics space to sim space
+            Vector2 vertScale = new Vector2(ConvertUnits.ToSimUnits(1)) * _scale;
+            foreach (Vertices vertices in list)
+            {
+                vertices.Scale(ref vertScale);
+            }
+
+            // Create a single body with multiple fixtures
+            Body compound = BodyFactory.CreateCompoundPolygon(World, list, 1f, BodyType.Static);
+            compound.BodyType = BodyType.Static;
+            compound.Position = ConvertUnits.ToSimUnits(MazeOffset + offset);
 
             // Add to krypton
             foreach (Vertices vertices in list)
@@ -218,23 +230,11 @@ namespace ShadowShootout
                 foreach (Vector2 vector in vertices)
                 {
                     i--;
-                    points[i] = vector + MazeOffset + (Texture == MazeB ? MazeBOffset : Vector2.Zero);
+                    points[i] = ConvertUnits.ToDisplayUnits(vector) + offset + MazeOffset;
                 }
                 ShadowHull hull = ShadowHull.CreateConvex(ref points);
                 KryptonEngine.Hulls.Add(hull);
             }
-
-            //scale the vertices from graphics space to sim space
-            Vector2 vertScale = new Vector2(ConvertUnits.ToSimUnits(1)) * _scale;
-            foreach (Vertices vertices in list)
-            {
-                vertices.Scale(ref vertScale);
-            }
-
-            //Create a single body with multiple fixtures
-            Body compound = BodyFactory.CreateCompoundPolygon(World, list, 1f, BodyType.Static);
-            compound.BodyType = BodyType.Static;
-            compound.Position = ConvertUnits.ToSimUnits(MazeOffset);
 
             new Mob(GamePlayManager.MobManager, new FarseerPhysicalBody(compound))
             {
@@ -262,8 +262,24 @@ namespace ShadowShootout
             base.Update(gameTime);
         }
 
+        private int lastScrollWheelValue, currentScrollWheelValue;
+        private Color AmbientColor = Color.Black;
         protected override void Draw(GameTime gameTime)
         {
+            MouseState mouseState = Mouse.GetState();
+            lastScrollWheelValue = currentScrollWheelValue;
+            currentScrollWheelValue = mouseState.ScrollWheelValue;
+
+            int scrollWheelValue = (currentScrollWheelValue - lastScrollWheelValue) / 20;
+
+            if (scrollWheelValue != 0)
+            {
+                byte b = (byte)(float)MathHelper.Clamp((255f / (float)scrollWheelValue), -2, 2);
+                AmbientColor.R += b;
+                AmbientColor.G += b;
+                AmbientColor.B += b;
+            }
+
             //create matrices
             Vector2 Location = new Vector2(0, 0);
             float zoom = 1;
@@ -285,7 +301,7 @@ namespace ShadowShootout
             KryptonEngine.Bluriness = 1.5f;
             KryptonEngine.SpriteBatchCompatablityEnabled = true;
             KryptonEngine.CullMode = CullMode.CullClockwiseFace;
-            KryptonEngine.AmbientColor = (IsKrypton ? Color.Black : Color.LightGray);
+            KryptonEngine.AmbientColor = AmbientColor;
             KryptonEngine.LightMapPrepare();
 
             // Make sure we clear the backbuffer *after* Krypton is done pre-rendering
